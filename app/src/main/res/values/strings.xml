@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Prak 12 TI UMY</string>
+    <string name="back">Kembali</string>
+    <string name="entry_siswa">Entry Data Siswa</string>
+    <string name="daftar_teman">Daftar Siswa</string>
+    <string name="nama">Nama</string>
+    <string name="alamat">Alamat</string>
+    <string name="telpon">Nomor Telepon</string>
+    <string name="btn_submit">Simpan Data</string>
+    <string name="required_field">Wajib diisi*</string>
+    <string name="loading">Sedang memuat data...</string>
+    <string name="loading_failed">Gagal memuat data dari server.</string>
+    <string name="retry">Coba Lagi</string>
+    <string name="data_kosong">Tidak ada data siswa.</string>
+    <string name="deleteSiswa">Hapus Siswa</string>
+    <string name="siswa">Siswa</string>
+    <string name="loading_img">Gambar Loading</string>
+    <string name="ic_connection_error">Ikon Galat Koneksi</string>
+</resources>
