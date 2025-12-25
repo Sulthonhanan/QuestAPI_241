@@ -2,14 +2,24 @@ package com.example.prak12.apiservice
 
 import com.example.prak12.modeldata.DataSiswa
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ServiceApiSiswa {
-    @GET("bacateman.php")
-    suspend fun getDataSiswa(): List<DataSiswa> // Nama disamakan dengan pemanggilan di HomeViewModel
+    @GET("bacaTeman.php")
+    suspend fun getDataSiswa(): List<DataSiswa>
 
     @POST("insertTM.php")
-    suspend fun postDataSiswa(@Body dataSiswa: DataSiswa): Response<Void> // Nama disamakan dengan pemanggilan di EntryViewModel
+    suspend fun postDataSiswa(@Body dataSiswa: DataSiswa): Response<Void>
+
+    @GET("baca1Teman.php")
+    suspend fun getSatuSiswa(@Query("id") id: Int): DataSiswa
+
+    @PUT("editTM.php")
+    suspend fun editSatuSiswa(
+        @Query("id") id: Int,
+        @Body dataSiswa: DataSiswa
+    ): Response<Void>
+
+    @DELETE("deleteTM.php")
+    suspend fun hapusSatuSiswa(@Query("id") id: Int): Response<Void>
 }
