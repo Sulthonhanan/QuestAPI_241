@@ -4,39 +4,58 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.prak12.modeldata.DetailSiswa
-import com.example.prak12.modeldata.UIStateSiswa
-import com.example.prak12.modeldata.toDataSiswa
+import androidx.lifecycle.viewModelScope
+import com.example.prak12.modeldata.DataSiswa
 import com.example.prak12.repositori.RepositoriDataSiswa
-import retrofit2.Response
+import kotlinx.coroutines.launch
 
 class EntryViewModel(private val repositoriDataSiswa: RepositoriDataSiswa) : ViewModel() {
-    var uiStateSiswa by mutableStateOf(UIStateSiswa())
+    var uiStateSiswa by mutableStateOf(SiswaUIState())
         private set
 
-    private fun validasiInput(uiState: DetailSiswa = uiStateSiswa.detailSiswa): Boolean {
-        return with(uiState) {
-            nama.isNotBlank() && alamat.isNotBlank() && telpon.isNotBlank()
-        }
+    fun updateUiState(siswaEvent: SiswaEvent) {
+        uiStateSiswa = SiswaUIState(siswaEvent = siswaEvent)
     }
 
-    fun updateUiState(detailSiswa: DetailSiswa) {
-        uiStateSiswa = UIStateSiswa(
-            detailSiswa = detailSiswa,
-            isEntryValid = validasiInput(detailSiswa)
-        )
-    }
-
-    suspend fun addSiswa() {
-        if (validasiInput()) {
-            val sip: Response<Void> = repositoriDataSiswa.postDataSiswa(
-                uiStateSiswa.detailSiswa.toDataSiswa()
-            )
-            if (sip.isSuccessful) {
-                println("Sukses Tambah Data : ${sip.message()}")
-            } else {
-                println("Gagal tambah data : ${sip.errorBody()}")
+    suspend fun insertSiswa() {
+        viewModelScope.launch {
+            try {
+                repositoriDataSiswa.postDataSiswa(uiStateSiswa.siswaEvent.toDataSiswa())
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
 }
+
+// Data class pendukung untuk State dan Event
+data class SiswaUIState(
+    val siswaEvent: SiswaEvent = SiswaEvent(),
+    val isEntryValid: Boolean = false
+)
+
+data class SiswaEvent(
+    val id: Int = 0,
+    val nama: String = "",
+    val alamat: String = "",
+    val telpon: String = ""
+)
+
+// Fungsi Mapper untuk konversi data
+fun SiswaEvent.toDataSiswa(): DataSiswa = DataSiswa(
+    id = id,
+    nama = nama,
+    alamat = alamat,
+    telpon = telpon
+)
+
+fun DataSiswa.toUiStateSiswa(): SiswaUIState = SiswaUIState(
+    siswaEvent = this.toSiswaEvent()
+)
+
+fun DataSiswa.toSiswaEvent(): SiswaEvent = SiswaEvent(
+    id = id,
+    nama = nama,
+    alamat = alamat,
+    telpon = telpon
+)
