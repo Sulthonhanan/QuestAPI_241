@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.prak12.uicontroller.route.*
-import com.example.prak12.view.* // Import ini penting untuk mengenali EntrySiswaScreen
+import com.example.prak12.view.*
 
 @Composable
 fun HostNavigasi(
@@ -20,15 +20,22 @@ fun HostNavigasi(
         startDestination = DestinasiHome.route,
         modifier = modifier
     ) {
-        // ... (kode Home sama seperti sebelumnya)
+        composable(DestinasiHome.route) {
+            HomeScreen(
+                navigateToItemEntry = { navController.navigate(DestinasiEntry.route) },
+                onDetailClick = { id ->
+                    navController.navigate("${DestinasiDetail.route}/$id")
+                }
+            )
+        }
 
         composable(DestinasiEntry.route) {
-            EntrySiswaScreen(navigateBack = { navController.popBackStack() }) // Sekarang harusnya sudah tidak merah
+            EntrySiswaScreen(navigateBack = { navController.popBackStack() })
         }
 
         composable(
             route = DestinasiDetail.routeWithArgs,
-            arguments = listOf(navArgument(DestinasiDetail.ITEM_ID_ARG) { // Menggunakan Kapital
+            arguments = listOf(navArgument(DestinasiDetail.ITEM_ID_ARG) { // Perbaikan di sini
                 type = NavType.IntType
             })
         ) {
@@ -42,7 +49,7 @@ fun HostNavigasi(
 
         composable(
             route = DestinasiEdit.routeWithArgs,
-            arguments = listOf(navArgument(DestinasiEdit.ITEM_ID_ARG) { // Menggunakan Kapital
+            arguments = listOf(navArgument(DestinasiEdit.ITEM_ID_ARG) { // Perbaikan di sini
                 type = NavType.IntType
             })
         ) {
